@@ -1,4 +1,3 @@
-[README.md](https://github.com/user-attachments/files/21914795/README.md)
 # AURA AI Assistant Mobile App
 
 A comprehensive AI assistant mobile application built with React Native and Expo, featuring chat interface, voice commands, document scanning, and location-based automation.
