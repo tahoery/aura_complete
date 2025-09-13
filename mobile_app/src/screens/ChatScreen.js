@@ -10,10 +10,14 @@ export default function ChatScreen() {
   const [messages, setMessages] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
 
+  import { sendToCline } from '../services/ClineService';
   useEffect(() => {
     // Initialize with welcome message
     setMessages([
       {
+    const [input, setInput] = useState('');
+    const [response, setResponse] = useState('');
+    const [loading, setLoading] = useState(false);
         _id: 1,
         text: "Hi! I'm AURA, your AI assistant. I can help you with questions, tasks, and much more. How can I assist you today?",
         createdAt: new Date(),
@@ -63,6 +67,16 @@ export default function ChatScreen() {
       <Bubble
         {...props}
         wrapperStyle={{
+    const handleSend = async () => {
+      setLoading(true);
+      try {
+        const res = await sendToCline(input);
+        setResponse(JSON.stringify(res));
+      } catch (e) {
+        setResponse('Error: ' + e.message);
+      }
+      setLoading(false);
+    };
           right: {
             backgroundColor: '#6200EE',
           },
@@ -130,6 +144,16 @@ export default function ChatScreen() {
 
 const styles = StyleSheet.create({
   container: {
+        <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Chat with Cline AI</Text>
+        <TextInput
+          style={{ borderWidth: 1, borderColor: '#ccc', padding: 8, marginVertical: 12, width: '100%' }}
+          placeholder="Type your request..."
+          value={input}
+          onChangeText={setInput}
+        />
+        <Button title={loading ? 'Sending...' : 'Send to Cline'} onPress={handleSend} disabled={loading || !input} />
+        <Text style={{ marginTop: 20 }}>Response:</Text>
+        <Text selectable style={{ marginTop: 4 }}>{response}</Text>
     flex: 1,
   },
   inputToolbar: {
