@@ -1,17 +1,16 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { View, StyleSheet, Alert, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Alert, TouchableOpacity, Text, TextInput, Button } from 'react-native';
 import { GiftedChat, Bubble, InputToolbar, Send } from 'react-native-gifted-chat';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Speech from 'expo-speech';
 import AIService from '../services/AIService';
 import { sendToCline } from '../services/ClineService';
-import { Text, TextInput, Button } from 'react-native';
 
 export default function ChatScreen() {
   const [messages, setMessages] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
-  const [input, setInput] = useState('');
+  const [clineInput, setClineInput] = useState('');
   const [response, setResponse] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -90,7 +89,7 @@ export default function ChatScreen() {
   const handleSend = async () => {
     setLoading(true);
     try {
-      const res = await sendToCline(input);
+      const res = await sendToCline(clineInput);
       setResponse(JSON.stringify(res));
     } catch (e) {
       setResponse('Error: ' + e.message);
@@ -146,10 +145,10 @@ export default function ChatScreen() {
         <TextInput
           style={{ borderWidth: 1, borderColor: '#ccc', padding: 8, marginVertical: 8, borderRadius: 6 }}
           placeholder="Type your request..."
-          value={input}
-          onChangeText={setInput}
+          value={clineInput}
+          onChangeText={setClineInput}
         />
-        <Button title={loading ? 'Sending...' : 'Send to Cline'} onPress={handleSend} disabled={loading || !input} />
+        <Button title={loading ? 'Sending...' : 'Send to Cline'} onPress={handleSend} disabled={loading || !clineInput} />
         <Text style={{ marginTop: 16, fontWeight: 'bold' }}>Response:</Text>
         <Text selectable style={{ marginTop: 4 }}>{response}</Text>
       </View>
